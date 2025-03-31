@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณระยะทาง</title>
+    <style>
+        #result {
+            color: red; 
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        button {
+            background-color: blue;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: darkblue;
+        }
+        input.valid {
+            background-color: lightgreen;
+        }
+        input.invalid {
+            background-color: lightcoral;
+        }
+        #guide {
+            color: blue;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>คำนวณระยะทางระหว่างสองจุด</h2>
+    <label>N1: <input type="number" id="n1" step="0.001" oninput="validateInput(this)"></label><br>
+    <label>E1: <input type="number" id="e1" step="0.001" oninput="validateInput(this)"></label><br>
+    <label>N2: <input type="number" id="n2" step="0.001" oninput="validateInput(this)"></label><br>
+    <label>E2: <input type="number" id="e2" step="0.001" oninput="validateInput(this)"></label><br>
+    <button onclick="calculateDistance()">คำนวณ</button>
+    <p>ผลลัพธ์: <span id="result"></span></p>
+    <p id="guide">กรอกทุกช่องด้วย ทศนิยม 3 ตำแหน่ง ให้เป็นสีเขียวทุกช่อง<br>ขอบคุณที่ใช้บริการ By Dailyduck</p>
+
+    <script>
+        function calculateDistance() {
+            let inputs = document.querySelectorAll("input");
+            let allValid = true;
+
+            inputs.forEach(input => {
+                if (!input.classList.contains("valid")) {
+                    allValid = false;
+                }
+            });
+
+            if (!allValid) {
+                document.getElementById("result").textContent = "กรุณากรอกให้ครบทุกช่องและเป็นทศนิยม 3 ตำแหน่ง";
+                return;
+            }
+
+            let n1 = parseFloat(document.getElementById("n1").value) || 0;
+            let e1 = parseFloat(document.getElementById("e1").value) || 0;
+            let n2 = parseFloat(document.getElementById("n2").value) || 0;
+            let e2 = parseFloat(document.getElementById("e2").value) || 0;
+
+            let distance = Math.sqrt(Math.pow(n2 - n1, 2) + Math.pow(e2 - e1, 2));
+            document.getElementById("result").textContent = distance.toFixed(3);
+        }
+
+        function validateInput(input) {
+            let value = input.value;
+            let regex = /^\d+(\.\d{3})$/; // ตรวจสอบว่ามีทศนิยม 3 ตำแหน่ง
+
+            if (regex.test(value)) {
+                input.classList.add("valid");
+                input.classList.remove("invalid");
+            } else {
+                input.classList.remove("valid");
+                input.classList.add("invalid");
+            }
+        }
+    </script>
+</body>
+</html>
